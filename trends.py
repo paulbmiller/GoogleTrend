@@ -4,6 +4,7 @@ Module to get google trends using pytrends.
 
 import pandas as pd
 from pytrends.request import TrendReq
+from pytrends import dailydata
 
 
 def by_region(kw_list, draw=True, drop_0=True, **kwargs):
@@ -33,11 +34,10 @@ def by_region(kw_list, draw=True, drop_0=True, **kwargs):
     df = pytrend.interest_by_region()
     
     if drop_0:
-        df.loc[(df!=0).any(axis=1)].plot(kind='bar')
-        return df.loc[(df!=0).any(axis=1)]
-    else:
+        df = df.loc[(df!=0).any(axis=1)]
+    if draw:
         df.plot(kind='bar')
-        return df
+    return df
 
 
 def over_time(kw_list, draw=True, **kwargs):
@@ -65,8 +65,11 @@ def over_time(kw_list, draw=True, **kwargs):
     df = pytrend.interest_over_time()
     
     df = df.drop('isPartial', axis=1)
-    df.plot()
+    
+    if draw:
+        df.plot()
     
     return df
+
 
 
